@@ -1,0 +1,32 @@
+name: "dst"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: "ubuntu-latest"
+    steps:
+    - name: "github actions: setup go"
+      uses: "actions/setup-go@v4"
+      with:
+        go-version: "1.22.0"
+
+    - name: "go: setup dst"
+      shell: "bash"
+      run: |
+        go install stefanco.de/dst/cmd/dst@latest
+        dst --version
+
+    - name: "dst: download data"
+      shell: "bash"
+      run: "dst --all --output dst.txt"
+
+    - name: "curl: ftp upload"
+      shell: "bash"
+      run: |
+        curl \
+          --ssl-reqd \
+          --user "${{ secrets.FTP_USER }}:${{ secrets.FTP_PASSWORD }}" \
+          --upload-file "dst.txt" \
+          "${{ secrets.FTP_HOST }}/text/dst/"
