@@ -1,0 +1,31 @@
+name: "enlil"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    strategy:
+      matrix:
+        product: 
+          - ovation_south_24h
+          - ovation_north_24h
+          
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "apt: install dependencies"
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+            ffmpeg
+        
+      - name: "curl: download '${{ matrix.product }}.mp4'"
+        run: curl -sSL $(curl -sSL https://services.swpc.noaa.gov/products/animations/${{ matrix.product }}.json | jq -r '.[] | "https://services.swpc.noaa.gov\(.url)"' | tr '\n' ' ') | ffmpeg -loglevel error -framerate 10 -f image2pipe -i - -c:v libx264 -r 30 -pix_fmt yuv420p -y ${{ matrix.product }}.mp4
+  
+      - name: "curl: ftp upload"
+        shell: "bash"
+        run: |
+          curl \
+            --ssl-reqd \
+            --user "${{ secrets.FTP_USER }}:${{ secrets.FTP_PASSWORD }}" \
+            --upload-file "${{ matrix.product }}.mp4" \
+            "${{ secrets.FTP_HOST }}/videos/ovation/"
