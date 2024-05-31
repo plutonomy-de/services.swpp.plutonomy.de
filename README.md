@@ -3,7 +3,8 @@
 [![dst](../../actions/workflows/dst.yml/badge.svg)](../../actions/workflows/dst.yml) 
 [![suvi](../../actions/workflows/suvi.yml/badge.svg)](../../actions/workflows/suvi.yml) 
 [![lasco](../../actions/workflows/lasco.yml/badge.svg)](../../actions/workflows/lasco.yml) 
-[![enlil](../../actions/workflows/enlil.yml/badge.svg)](../../actions/workflows/enlil.yml) 
+[![enlil](../../actions/workflows/enlil.yml/badge.svg)](../../actions/workflows/enlil.yml)
+[![ovation](../../actions/workflows/ovation.yml/badge.svg)](../../actions/workflows/ovation.yml) 
 
 A Platform for Distributing Data and Graphics on Space Weather.
 
